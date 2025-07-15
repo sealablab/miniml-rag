@@ -1,0 +1,20 @@
+services:
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    ports:
+      - "${QDRANT_PORT}:6333"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+
+  qdrant-ui:
+    build:
+      context: ./qdrant-web-ui
+      dockerfile: ../qdrant-web-ui.Dockerfile
+    container_name: qdrant-ui
+    ports:
+      - "${QDRANT_UI_PORT}:80"
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+    depends_on:
+      - qdrant
